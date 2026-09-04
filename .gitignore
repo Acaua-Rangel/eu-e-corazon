@@ -3,5 +3,4 @@ dist
 dist-ssr
 *.local
 .vercel
-.originals_backup
 .DS_Store

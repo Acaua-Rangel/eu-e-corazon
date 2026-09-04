@@ -55,9 +55,13 @@ export default function Loader({ onLoadComplete }) {
 
   useEffect(() => {
     const imagesToLoad = Array.from(
-      new Set([...storySlides.map((s) => s.image), '/images/IMG-20260618-WA0018.webp'])
+      new Set([
+        ...storySlides.filter((s) => s.image).map((s) => s.image),
+        '/images/IMG-20260618-WA0018.webp',
+      ])
     );
-    const totalAssets = imagesToLoad.length;
+    const videosToLoad = storySlides.filter((s) => s.video).map((s) => s.video);
+    const totalAssets = imagesToLoad.length + videosToLoad.length;
     let loadedCount = 0;
 
     const handleAssetLoad = () => {
@@ -78,7 +82,7 @@ export default function Loader({ onLoadComplete }) {
         setStatusText("Tudo pronto!");
       }
 
-      // Only finish when 100% of all images are loaded into browser cache
+      // Only finish when 100% of all assets are loaded into browser cache
       if (loadedCount >= totalAssets) {
         setTimeout(() => {
           if (loaderRef.current) {
@@ -96,12 +100,21 @@ export default function Loader({ onLoadComplete }) {
       }
     };
 
-    // Preload all images
+    // Preload images
     imagesToLoad.forEach((src) => {
       const img = new Image();
       img.src = src;
       img.onload = handleAssetLoad;
-      img.onerror = handleAssetLoad; // prevent stall if one fails
+      img.onerror = handleAssetLoad;
+    });
+
+    // Preload videos
+    videosToLoad.forEach((src) => {
+      const vid = document.createElement('video');
+      vid.src = src;
+      vid.preload = 'auto';
+      vid.onloadeddata = handleAssetLoad;
+      vid.onerror = handleAssetLoad;
     });
 
     if (document.fonts) {

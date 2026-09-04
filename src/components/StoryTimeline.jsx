@@ -219,24 +219,46 @@ export default function StoryTimeline() {
               pointerEvents: i === activeIndex ? 'auto' : 'none',
             }}
           >
-            {/* Blurred backdrop for portrait images */}
-            <div
-              className="absolute inset-0 w-full h-full bg-cover bg-center filter blur-2xl scale-110 opacity-35"
-              style={{ backgroundImage: `url(${slide.image})` }}
-            />
+            {/* Blurred backdrop */}
+            {slide.video ? (
+              <video
+                src={slide.video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover filter blur-2xl scale-110 opacity-35"
+              />
+            ) : (
+              <div
+                className="absolute inset-0 w-full h-full bg-cover bg-center filter blur-2xl scale-110 opacity-35"
+                style={{ backgroundImage: `url(${slide.image})` }}
+              />
+            )}
 
             {/* Dark gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20 z-10" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 to-transparent z-10" />
 
-            {/* Main Image */}
+            {/* Main Media (Video or Image) */}
             <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-8 md:p-12 z-10">
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-2xl shadow-black/80 border border-white/10"
-                loading="eager"
-              />
+              {slide.video ? (
+                <video
+                  src={slide.video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-2xl shadow-black/80 border border-white/10"
+                />
+              ) : (
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-2xl shadow-black/80 border border-white/10"
+                  loading="eager"
+                />
+              )}
             </div>
           </div>
         ))}

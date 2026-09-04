@@ -51,20 +51,20 @@ export const storySlides = [
   },
   {
     id: "saga-da-vela-madero",
-    date: "05 de Julho",
+    date: "29 de Junho",
     tagline: "O clássico Salvador Shopping",
     title: "A Famosa Saga da Vela no Madero",
-    image: "/images/20260705_171334.webp",
+    video: "/videos/VID-20260629-WA0004.mp4",
     description:
       "A gente combinou um date no Salvador Shopping e a ideia original era ser um date duplo. Só que a outra menina furou... e adivinha só quem sobrou de vela com a gente? A Clara! Foi hambúrguer no Madero, muitas risadas da situação e mais um episódio pro livro das nossas memórias icônicas.",
     highlight: "Comida boa, risadas sinceras e a Clara sendo nossa fã número 1 de vela."
   },
   {
     id: "saga-da-vela-gattai",
-    date: "Julho",
+    date: "05 de Julho",
     tagline: "Mais um date icônico",
     title: "Gattai: A Vela Parte II",
-    image: "/images/IMG-20260715-WA0004.webp",
+    image: "/images/20260705_171334.webp",
     description:
       "Como se uma vez só não bastasse, fomos no restaurante japonês Gattai e a história se repetiu! A Clara ficou de vela novamente, mas o que mais marcou foi o quanto a nossa cumplicidade e dengo estavam evidentes. A cada dia, eu me apaixonava mais pelo seu jeito, pelo seu olhar e pelo seu aconchego.",
     highlight: "Em qualquer lugar, você sempre foi o centro das minhas atenções."
