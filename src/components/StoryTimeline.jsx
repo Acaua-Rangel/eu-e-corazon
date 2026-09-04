@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { storySlides } from '../data/storyData';
@@ -110,6 +110,84 @@ export default function StoryTimeline() {
     const target = trigger.start + (index / (totalSlides - 1)) * (trigger.end - trigger.start);
     window.scrollTo({ top: target, behavior: 'smooth' });
   };
+
+  // Touch Swipe (YouTube Shorts style: 1 slide per drag/swipe gesture)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    let startY = 0;
+    let startX = 0;
+    let isSwiping = false;
+
+    const handleTouchStart = (e) => {
+      if (e.touches.length !== 1) return;
+      startY = e.touches[0].clientY;
+      startX = e.touches[0].clientX;
+      isSwiping = true;
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isSwiping || e.touches.length !== 1) return;
+      const diffY = e.touches[0].clientY - startY;
+      const diffX = e.touches[0].clientX - startX;
+
+      // Prevent multi-page browser momentum flinging on vertical swipe
+      if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 8) {
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      if (!isSwiping) return;
+      isSwiping = false;
+
+      const trigger = ScrollTrigger.getById('story-scroll-trigger');
+      if (!trigger) return;
+
+      const endY = e.changedTouches[0].clientY;
+      const endX = e.changedTouches[0].clientX;
+      const diffY = endY - startY;
+      const diffX = endX - startX;
+
+      // Minimum swipe threshold
+      if (Math.abs(diffY) > 35 && Math.abs(diffY) > Math.abs(diffX)) {
+        const progress = trigger.progress;
+        const currentSlide = Math.min(
+          Math.max(Math.round(progress * (totalSlides - 1)), 0),
+          totalSlides - 1
+        );
+
+        if (diffY < -35) {
+          // Swiped up (de baixo pra cima -> next slide)
+          if (currentSlide < totalSlides - 1) {
+            scrollToSlideIndex(currentSlide + 1);
+          } else {
+            const closingEl = document.getElementById('closing-section');
+            closingEl?.scrollIntoView({ behavior: 'smooth' });
+          }
+        } else if (diffY > 35) {
+          // Swiped down (de cima pra baixo -> previous slide)
+          if (currentSlide > 0) {
+            scrollToSlideIndex(currentSlide - 1);
+          } else {
+            const heroEl = document.getElementById('hero-section');
+            heroEl?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }
+    };
+
+    el.addEventListener('touchstart', handleTouchStart, { passive: true });
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    el.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener('touchstart', handleTouchStart);
+      el.removeEventListener('touchmove', handleTouchMove);
+      el.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [totalSlides]);
 
   return (
     <section id="story-timeline" className="relative w-full">
