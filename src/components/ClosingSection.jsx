@@ -34,7 +34,7 @@ export default function ClosingSection() {
             Seja nas aventuras improvisadas, na trilha sem fim em Pituaçu, nas risadas com as velas no shopping, no dia mágico dos museus, no cosplay do Aranha indiano ou simplesmente num fim de tarde dividindo um sorvete... o melhor lugar do mundo sempre foi onde você estava.
           </p>
           <p className="font-semibold text-rose-300 font-serif text-lg sm:text-xl pt-2 border-t border-white/10">
-            "Que esses sejam apenas os primeiros de milhares de momentos lindos que ainda vamos construir e colecionar juntos."
+            "Que esses sejam apenas os primeiros de milhares de momentos que ainda vamos construir e colecionar juntos."
           </p>
         </div>
 
