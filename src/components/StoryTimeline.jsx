@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useEffect } from 'react';
+import React, { useLayoutEffect, useRef, useEffect, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { storySlides } from '../data/storyData';
@@ -6,13 +6,25 @@ import { FaCalendarAlt, FaQuoteLeft } from 'react-icons/fa';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Prevent mobile address bar show/hide from causing layout jitter
+ScrollTrigger.config({
+  ignoreMobileResize: true,
+});
+
 export default function StoryTimeline() {
   const containerRef = useRef(null);
   const totalSlides = storySlides.length;
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const scrollToSlideIndex = useCallback((index) => {
+    const trigger = ScrollTrigger.getById('story-scroll-trigger');
+    if (!trigger) return;
+    const target = trigger.start + (index / (totalSlides - 1)) * (trigger.end - trigger.start);
+    window.scrollTo({ top: target, behavior: 'smooth' });
+  }, [totalSlides]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Sensibilidade calibrada por slide
       const scrollPerSlide = 220;
       const totalScrollDistance = (totalSlides - 1) * scrollPerSlide;
       const segmentDuration = 1;
@@ -25,36 +37,20 @@ export default function StoryTimeline() {
           end: `+=${totalScrollDistance}px`,
           pin: true,
           pinSpacing: true,
-          scrub: 0.2,
-          fastScrollEnd: true,
-          preventOverlaps: true,
+          scrub: 0.25,
+          anticipatePin: 1,
           onUpdate: (self) => {
             const progress = self.progress;
-            const activeIndex = Math.min(
-              Math.floor(progress * totalSlides),
+            const newIndex = Math.min(
+              Math.floor(progress * totalSlides + 0.05),
               totalSlides - 1
             );
-
-            // Update dots with lightweight inline style
-            const dots = containerRef.current?.querySelectorAll('[data-dot]');
-            dots?.forEach((dot, j) => {
-              if (j === activeIndex) {
-                dot.style.backgroundColor = '#f43f5e';
-                dot.style.borderColor = '#fda4af';
-                dot.style.transform = 'scale(1.35)';
-                dot.style.boxShadow = '0 0 8px rgba(244, 63, 94, 0.7)';
-              } else {
-                dot.style.backgroundColor = 'transparent';
-                dot.style.borderColor = 'rgba(255, 255, 255, 0.35)';
-                dot.style.transform = 'scale(1)';
-                dot.style.boxShadow = 'none';
-              }
-            });
+            setActiveIndex(newIndex);
           },
         },
       });
 
-      // Build lightweight hardware-accelerated crossfade & text transitions
+      // Build slide and text crossfades
       for (let i = 1; i < totalSlides; i++) {
         const slideEl = containerRef.current?.querySelector(`[data-slide="${i}"]`);
         const textEl = containerRef.current?.querySelector(`[data-text="${i}"]`);
@@ -67,16 +63,15 @@ export default function StoryTimeline() {
             prevTextEl,
             {
               opacity: 0,
-              y: -20,
+              y: -18,
               duration: segmentDuration * 0.35,
               ease: 'power1.in',
-              force3D: true,
             },
             pos
           );
         }
 
-        // Crossfade media (hardware accelerated)
+        // Crossfade image/video
         if (slideEl) {
           tl.to(
             slideEl,
@@ -84,23 +79,21 @@ export default function StoryTimeline() {
               opacity: 1,
               duration: segmentDuration * 0.6,
               ease: 'none',
-              force3D: true,
             },
             pos + segmentDuration * 0.15
           );
         }
 
-        // Fade in new text
+        // Fade in current text
         if (textEl) {
           tl.fromTo(
             textEl,
-            { opacity: 0, y: 20 },
+            { opacity: 0, y: 18 },
             {
               opacity: 1,
               y: 0,
               duration: segmentDuration * 0.38,
               ease: 'power1.out',
-              force3D: true,
             },
             pos + segmentDuration * 0.55
           );
@@ -111,14 +104,7 @@ export default function StoryTimeline() {
     return () => ctx.revert();
   }, [totalSlides]);
 
-  const scrollToSlideIndex = (index) => {
-    const trigger = ScrollTrigger.getById('story-scroll-trigger');
-    if (!trigger) return;
-    const target = trigger.start + (index / (totalSlides - 1)) * (trigger.end - trigger.start);
-    window.scrollTo({ top: target, behavior: 'smooth' });
-  };
-
-  // Touch Swipe (1 slide per swipe gesture, YouTube Shorts style)
+  // Touch Swipe for mobile (YouTube Shorts 1-swipe gesture)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -139,7 +125,7 @@ export default function StoryTimeline() {
       const diffY = e.touches[0].clientY - startY;
       const diffX = e.touches[0].clientX - startX;
 
-      if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 8) {
+      if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 10) {
         if (e.cancelable) e.preventDefault();
       }
     };
@@ -164,6 +150,7 @@ export default function StoryTimeline() {
         );
 
         if (diffY < -35) {
+          // Swiped up -> next slide
           if (currentSlide < totalSlides - 1) {
             scrollToSlideIndex(currentSlide + 1);
           } else {
@@ -171,6 +158,7 @@ export default function StoryTimeline() {
             closingEl?.scrollIntoView({ behavior: 'smooth' });
           }
         } else if (diffY > 35) {
+          // Swiped down -> previous slide
           if (currentSlide > 0) {
             scrollToSlideIndex(currentSlide - 1);
           } else {
@@ -190,32 +178,35 @@ export default function StoryTimeline() {
       el.removeEventListener('touchmove', handleTouchMove);
       el.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [totalSlides]);
+  }, [totalSlides, scrollToSlideIndex]);
 
   return (
-    <section id="story-timeline" className="relative w-full">
+    <section id="story-timeline" className="relative w-full h-[100dvh] overflow-hidden">
       <div
         ref={containerRef}
-        className="relative w-screen h-screen overflow-hidden bg-[#0c0a09] select-none"
+        className="relative w-full h-full overflow-hidden bg-[#0c0a09] select-none"
       >
-        {/* Images / Videos Layer (GPU Accelerated) */}
+        {/* Images / Videos Layer */}
         {storySlides.map((slide, i) => (
           <div
             key={slide.id}
             data-slide={i}
-            className="absolute inset-0 w-full h-full gpu-accelerated"
-            style={{ opacity: i === 0 ? 1 : 0, zIndex: i }}
+            className="absolute inset-0 w-full h-full"
+            style={{
+              opacity: i === 0 ? 1 : 0,
+              zIndex: i,
+              pointerEvents: i === activeIndex ? 'auto' : 'none',
+            }}
           >
-            {/* Ambient Lighting Backdrop (0% GPU cost vs heavy 40px Gaussian blur) */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/60 via-[#150a10]/40 to-[#0c0a09]" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vh] bg-rose-950/20 rounded-full blur-[90px] pointer-events-none" />
+            {/* Ambient Lighting Backdrop (Lightweight, 0% GPU penalty) */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/70 via-[#13090e]/50 to-[#0c0a09] pointer-events-none" />
 
             {/* Dark gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20 z-10 pointer-events-none" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 to-transparent z-10 pointer-events-none" />
 
             {/* Main Media (Image or Video) */}
-            <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-8 md:p-12 z-10">
+            <div className="relative w-full h-full flex items-center justify-center p-3 sm:p-8 md:p-12 z-10">
               {slide.video ? (
                 <video
                   src={slide.video}
@@ -223,51 +214,49 @@ export default function StoryTimeline() {
                   loop
                   muted
                   playsInline
-                  className="max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10 gpu-accelerated"
+                  className="max-h-[72vh] sm:max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10"
                 />
               ) : (
                 <img
                   src={slide.image}
                   alt={slide.title}
-                  className="max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10 gpu-accelerated"
-                  loading="eager"
-                  decoding="async"
+                  className="max-h-[72vh] sm:max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10"
                 />
               )}
             </div>
           </div>
         ))}
 
-        {/* Narrative Texts Layer directly over the photo (GPU Accelerated) */}
+        {/* Narrative Texts Layer directly over the photo */}
         {storySlides.map((slide, i) => (
           <div
             key={`text-${slide.id}`}
             data-text={i}
-            className="absolute bottom-0 left-0 right-0 z-40 px-6 sm:px-12 md:px-20 pb-10 sm:pb-14 pointer-events-none gpu-accelerated"
+            className="absolute bottom-0 left-0 right-0 z-40 px-5 sm:px-12 md:px-20 pb-8 sm:pb-12 pointer-events-none"
             style={{ opacity: i === 0 ? 1 : 0 }}
           >
             <div className="max-w-3xl">
-              <div className="flex items-center gap-3 mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+              <div className="flex items-center gap-2.5 mb-1.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
                 <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-rose-400 tracking-wider uppercase">
-                  <FaCalendarAlt className="w-3.5 h-3.5" />
+                  <FaCalendarAlt className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   {slide.date}
                 </span>
-                <span className="text-white/50 text-xs uppercase tracking-widest font-medium">
+                <span className="text-white/60 text-xs uppercase tracking-widest font-medium">
                   • {slide.tagline}
                 </span>
               </div>
 
-              <h2 className="text-white text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+              <h2 className="text-white text-xl sm:text-3xl md:text-5xl font-bold leading-tight mb-2 sm:mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
                 {slide.title}
               </h2>
 
-              <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] max-w-2xl">
+              <p className="text-white/95 text-xs sm:text-base md:text-lg leading-relaxed mb-2.5 sm:mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] max-w-2xl font-light sm:font-normal">
                 {slide.description}
               </p>
 
               {slide.highlight && (
-                <div className="flex items-start gap-2 text-rose-300 text-xs sm:text-sm italic font-serif drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  <FaQuoteLeft className="w-3 h-3 shrink-0 text-rose-400 mt-0.5" />
+                <div className="flex items-start gap-1.5 text-rose-300 text-xs sm:text-sm italic font-serif drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  <FaQuoteLeft className="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0 text-rose-400 mt-0.5" />
                   <span>{slide.highlight}</span>
                 </div>
               )}
@@ -275,18 +264,18 @@ export default function StoryTimeline() {
           </div>
         ))}
 
-        {/* Vertical Dot Navigation Indicator (Zero clipping with proper padding) */}
-        <div className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-2.5 pointer-events-auto max-h-[75vh] py-3 px-3 overflow-visible opacity-55 hover:opacity-100 transition-opacity">
+        {/* Vertical Dot Navigation Indicator (Synchronized via React State + No Clipping) */}
+        <div className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-2 pointer-events-auto max-h-[75vh] py-2 px-2 overflow-visible opacity-70 hover:opacity-100 transition-opacity">
           {storySlides.map((_, i) => (
-            <div key={`dot-wrapper-${i}`} className="flex items-center justify-center w-4 h-4">
+            <div key={`dot-wrapper-${i}`} className="flex items-center justify-center w-3.5 h-3.5">
               <button
-                data-dot={i}
                 onClick={() => scrollToSlideIndex(i)}
-                className="w-2.5 h-2.5 rounded-full border border-white/40 transition-all duration-300 cursor-pointer hover:border-rose-400 hover:scale-125"
+                className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border transition-all duration-300 cursor-pointer"
                 style={{
-                  backgroundColor: i === 0 ? '#f43f5e' : 'transparent',
-                  borderColor: i === 0 ? '#fda4af' : 'rgba(255, 255, 255, 0.35)',
-                  boxShadow: i === 0 ? '0 0 8px rgba(244, 63, 94, 0.7)' : 'none',
+                  backgroundColor: i === activeIndex ? '#f43f5e' : 'transparent',
+                  borderColor: i === activeIndex ? '#fda4af' : 'rgba(255, 255, 255, 0.4)',
+                  transform: i === activeIndex ? 'scale(1.35)' : 'scale(1)',
+                  boxShadow: i === activeIndex ? '0 0 8px rgba(244, 63, 94, 0.8)' : 'none',
                 }}
                 title={`Momento ${i + 1}`}
               />

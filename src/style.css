@@ -68,10 +68,3 @@ html, body {
   animation: pulse-glow 2.5s ease-in-out infinite;
 }
 
-/* GPU hardware acceleration for smooth 60-120fps mobile transitions */
-.gpu-accelerated {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  will-change: opacity, transform;
-}
-
