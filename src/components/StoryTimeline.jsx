@@ -38,8 +38,9 @@ export default function StoryTimeline() {
           end: `+=${totalScrollDistance}px`,
           pin: true,
           pinSpacing: true,
-          scrub: 0.25,
+          pinType: 'transform',
           anticipatePin: 1,
+          scrub: 0.25,
           onUpdate: (self) => {
             const progress = self.progress;
             const newIndex = Math.min(
