@@ -2,7 +2,7 @@ export const storySlides = [
   {
     id: "inicio-stories",
     date: "13 de Junho",
-    tagline: "Como tudo começou",
+    tagline: "O começo",
     title: "O primeiro story",
     image: "/images/20260613.webp",
     description:
@@ -12,7 +12,7 @@ export const storySlides = [
   {
     id: "primeiro-dia-casa-dela",
     date: "19 de Junho",
-    tagline: "O nosso primeiro dia",
+    tagline: "Primeiro dia",
     title: "Assistindo ao jogo",
     image: "/images/IMG-20260619-WA0043.webp",
     description:
@@ -22,7 +22,7 @@ export const storySlides = [
   {
     id: "shopping-certeza-1",
     date: "21 de Junho",
-    tagline: "A certeza que já era nós",
+    tagline: "Certeza",
     title: "Certeza de nós dois",
     image: "/images/20260621_214428.webp",
     description:
@@ -32,7 +32,7 @@ export const storySlides = [
   {
     id: "shopping-certeza-2",
     date: "21 de Junho",
-    tagline: "Aquele carinho que transborda",
+    tagline: "Carinho",
     title: "Aquele beijo",
     image: "/images/20260621_214435.webp",
     description:
@@ -52,7 +52,7 @@ export const storySlides = [
   {
     id: "saga-da-vela-madero",
     date: "29 de Junho",
-    tagline: "O clássico Salvador Shopping",
+    tagline: "Saga da vela I",
     title: "A vela no Madero",
     video: "/videos/VID-20260629-WA0004.mp4",
     description:
@@ -62,12 +62,12 @@ export const storySlides = [
   {
     id: "saga-da-vela-gattai",
     date: "05 de Julho",
-    tagline: "Mais um date marcante",
+    tagline: "Saga da vela II",
     title: "A vela no Gattai",
     image: "/images/20260705_171334.webp",
     description:
-      "Fomos no restaurante japonês Gattai e a história se repetiu: a Clara de vela novamente. O que mais marcou foi o quanto a nossa cumplicidade era evidente. A cada dia, eu me apaixonava mais pelo seu jeito, pelo seu olhar e pela sua companhia.",
-    highlight: "Em qualquer lugar, você sempre foi o centro da minha atenção."
+      "No Gattai a história se repetiu e a Clara ficou de vela de novo. Mas o que mais marcou foi a nossa cumplicidade e como a gente estava cada vez mais grudado.",
+    highlight: "A cumplicidade que só aumentava."
   },
   {
     id: "museu-arte-bahia-1",
@@ -82,7 +82,7 @@ export const storySlides = [
   {
     id: "museu-arte-bahia-2",
     date: "11 de Julho",
-    tagline: "Arte, Corações e Planetas",
+    tagline: "Projeções",
     title: "O Mundo Bita",
     image: "/images/20260711_173538.webp",
     description:
@@ -122,12 +122,12 @@ export const storySlides = [
   {
     id: "cosplay-finalizado",
     date: "06 de Agosto",
-    tagline: "A pressa e a paciência",
+    tagline: "A aranha",
     title: "A aranha no peito",
     image: "/images/IMG-20260806-WA0009.webp",
     description:
-      "Fui na sua casa para desenharmos a aranha que ficava no peito. Na hora, por conta da pressa e da impaciência, quase não deu certo... mas levei para casa, terminei com calma e o resultado ficou excelente. Estávamos prontos para o evento.",
-    highlight: "O trabalho em equipe que sempre dá certo no final."
+      "Fui na sua casa para pintar a aranha no peito. Na hora quase não deu certo pela pressa, mas terminei em casa com calma e o resultado ficou excelente.",
+    highlight: "Trabalho em equipe que dá certo."
   },
   {
     id: "sorveteria-ribeira",
@@ -142,22 +142,22 @@ export const storySlides = [
   {
     id: "cinema-aranhaverso-1",
     date: "08 de Agosto",
-    tagline: "Através do Aranhaverso",
+    tagline: "No cinema",
     title: "Cinema no colo",
     image: "/images/20260808_150214.webp",
     description:
-      "E finalmente o dia do cinema: fomos assistir a 'Homem-Aranha: Através do Aranhaverso' com João e a amiga dele. Foi corrido, mas valeu a pena. Chegar fantasiado de Homem-Aranha indiano e te carregar no colo em frente ao banner do Aranhaverso foi o ponto alto.",
-    highlight: "Em qualquer multiverso possível, eu sempre escolheria você."
+      "Fomos ao cinema com João e a amiga dele para ver o novo filme do Homem-Aranha. Foi uma correria para aprontar o traje, mas fomos com o que já estava feito — e você também estava com o seu cosplay combinando. Mesmo que as pessoas ali não soubessem que estávamos de cosplay, a gente sabia. Te carregar no colo em frente ao banner foi o ponto alto.",
+    highlight: "Mesmo que ninguém soubesse do cosplay, a gente sabia."
   },
   {
     id: "cinema-aranhaverso-2",
     date: "08 de Agosto",
-    tagline: "Sala de cinema e óculos 3D",
+    tagline: "Sessão 3D",
     title: "Sessão 3D",
     image: "/images/IMG-20260808-WA0036.webp",
     description:
-      "Nós dois na sala de cinema com os óculos 3D, prontos para a sessão, com a pipoca e você ao meu lado. É muito bom poder compartilhar as coisas que a gente gosta com quem a gente gosta.",
-    highlight: "A melhor companhia para qualquer sessão de cinema."
+      "Nós dois na sala de cinema com os óculos 3D e pipoca, prontos para a sessão. Compartilhar essa loucura boa e esse momento com você ao meu lado não tem preço.",
+    highlight: "A melhor companhia para todas as aventuras."
   },
   {
     id: "pituacu-paisagem",
@@ -172,7 +172,7 @@ export const storySlides = [
   {
     id: "pituacu-degraus",
     date: "15 de Agosto",
-    tagline: "Tempo só nosso",
+    tagline: "Só nós dois",
     title: "Tempo só nosso",
     image: "/images/IMG-20260815-WA0013.webp",
     description:
@@ -196,9 +196,10 @@ export const storySlides = [
     title: "A pizza no fim do dia",
     image: "/images/IMG-20260815-WA0019.webp",
     description:
-      "Depois de toda a caminhada em Pituaçu, a fome bateu e fomos naquela pizzaria que também servia sushi. O atendimento no início deixou a desejar... mas quando a pizza chegou, estava excelente. Comemos, rimos da situação e fechamos o dia muito bem.",
+      "Depois de toda a caminhada, fomos naquela pizzaria que também servia sushi. O atendimento no início deixou a desejar... mas quando a pizza chegou, estava excelente. Comemos, rimos da situação e fechamos o dia muito bem.",
     highlight: "Com você, até os imprevistos viram boas histórias."
   }
 ];
+
 
 
