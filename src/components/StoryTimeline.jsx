@@ -264,7 +264,7 @@ export default function StoryTimeline() {
           <div
             key={`text-${slide.id}`}
             data-text={i}
-            className="absolute bottom-0 left-0 right-0 z-40 px-5 sm:px-12 md:px-20 pb-8 sm:pb-12 pointer-events-none"
+            className="absolute bottom-0 left-0 right-0 z-40 px-7 sm:px-14 md:px-24 pb-10 sm:pb-14 md:pb-16 pointer-events-none"
           >
             <div className="max-w-3xl">
               <div className="flex items-center gap-2.5 mb-1.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
