@@ -13,7 +13,7 @@ export default function StoryTimeline() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       // Sensibilidade calibrada por slide
-      const scrollPerSlide = 240;
+      const scrollPerSlide = 220;
       const totalScrollDistance = (totalSlides - 1) * scrollPerSlide;
       const segmentDuration = 1;
 
@@ -25,7 +25,9 @@ export default function StoryTimeline() {
           end: `+=${totalScrollDistance}px`,
           pin: true,
           pinSpacing: true,
-          scrub: 0.35,
+          scrub: 0.2,
+          fastScrollEnd: true,
+          preventOverlaps: true,
           onUpdate: (self) => {
             const progress = self.progress;
             const activeIndex = Math.min(
@@ -33,24 +35,26 @@ export default function StoryTimeline() {
               totalSlides - 1
             );
 
-            // Update dots
+            // Update dots with lightweight inline style
             const dots = containerRef.current?.querySelectorAll('[data-dot]');
             dots?.forEach((dot, j) => {
               if (j === activeIndex) {
                 dot.style.backgroundColor = '#f43f5e';
                 dot.style.borderColor = '#fda4af';
                 dot.style.transform = 'scale(1.35)';
+                dot.style.boxShadow = '0 0 8px rgba(244, 63, 94, 0.7)';
               } else {
                 dot.style.backgroundColor = 'transparent';
                 dot.style.borderColor = 'rgba(255, 255, 255, 0.35)';
                 dot.style.transform = 'scale(1)';
+                dot.style.boxShadow = 'none';
               }
             });
           },
         },
       });
 
-      // Build crossfade and text transitions for each slide
+      // Build lightweight hardware-accelerated crossfade & text transitions
       for (let i = 1; i < totalSlides; i++) {
         const slideEl = containerRef.current?.querySelector(`[data-slide="${i}"]`);
         const textEl = containerRef.current?.querySelector(`[data-text="${i}"]`);
@@ -63,15 +67,16 @@ export default function StoryTimeline() {
             prevTextEl,
             {
               opacity: 0,
-              y: -30,
-              duration: segmentDuration * 0.4,
+              y: -20,
+              duration: segmentDuration * 0.35,
               ease: 'power1.in',
+              force3D: true,
             },
             pos
           );
         }
 
-        // Crossfade media
+        // Crossfade media (hardware accelerated)
         if (slideEl) {
           tl.to(
             slideEl,
@@ -79,8 +84,9 @@ export default function StoryTimeline() {
               opacity: 1,
               duration: segmentDuration * 0.6,
               ease: 'none',
+              force3D: true,
             },
-            pos + segmentDuration * 0.2
+            pos + segmentDuration * 0.15
           );
         }
 
@@ -88,14 +94,15 @@ export default function StoryTimeline() {
         if (textEl) {
           tl.fromTo(
             textEl,
-            { opacity: 0, y: 30 },
+            { opacity: 0, y: 20 },
             {
               opacity: 1,
               y: 0,
-              duration: segmentDuration * 0.4,
+              duration: segmentDuration * 0.38,
               ease: 'power1.out',
+              force3D: true,
             },
-            pos + segmentDuration * 0.6
+            pos + segmentDuration * 0.55
           );
         }
       }
@@ -111,7 +118,7 @@ export default function StoryTimeline() {
     window.scrollTo({ top: target, behavior: 'smooth' });
   };
 
-  // Touch Swipe (YouTube Shorts style: 1 slide per drag/swipe gesture)
+  // Touch Swipe (1 slide per swipe gesture, YouTube Shorts style)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -132,7 +139,6 @@ export default function StoryTimeline() {
       const diffY = e.touches[0].clientY - startY;
       const diffX = e.touches[0].clientX - startX;
 
-      // Prevent multi-page browser momentum flinging on vertical swipe
       if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 8) {
         if (e.cancelable) e.preventDefault();
       }
@@ -150,7 +156,6 @@ export default function StoryTimeline() {
       const diffY = endY - startY;
       const diffX = endX - startX;
 
-      // Minimum swipe threshold
       if (Math.abs(diffY) > 35 && Math.abs(diffY) > Math.abs(diffX)) {
         const progress = trigger.progress;
         const currentSlide = Math.min(
@@ -159,7 +164,6 @@ export default function StoryTimeline() {
         );
 
         if (diffY < -35) {
-          // Swiped up (de baixo pra cima -> next slide)
           if (currentSlide < totalSlides - 1) {
             scrollToSlideIndex(currentSlide + 1);
           } else {
@@ -167,7 +171,6 @@ export default function StoryTimeline() {
             closingEl?.scrollIntoView({ behavior: 'smooth' });
           }
         } else if (diffY > 35) {
-          // Swiped down (de cima pra baixo -> previous slide)
           if (currentSlide > 0) {
             scrollToSlideIndex(currentSlide - 1);
           } else {
@@ -195,34 +198,21 @@ export default function StoryTimeline() {
         ref={containerRef}
         className="relative w-screen h-screen overflow-hidden bg-[#0c0a09] select-none"
       >
-        {/* Images / Videos Layer */}
+        {/* Images / Videos Layer (GPU Accelerated) */}
         {storySlides.map((slide, i) => (
           <div
             key={slide.id}
             data-slide={i}
-            className="absolute inset-0 w-full h-full"
+            className="absolute inset-0 w-full h-full gpu-accelerated"
             style={{ opacity: i === 0 ? 1 : 0, zIndex: i }}
           >
-            {/* Blurred backdrop for portrait images / video */}
-            {slide.video ? (
-              <video
-                src={slide.video}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover filter blur-2xl scale-110 opacity-35"
-              />
-            ) : (
-              <div
-                className="absolute inset-0 w-full h-full bg-cover bg-center filter blur-2xl scale-110 opacity-35"
-                style={{ backgroundImage: `url(${slide.image})` }}
-              />
-            )}
+            {/* Ambient Lighting Backdrop (0% GPU cost vs heavy 40px Gaussian blur) */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/60 via-[#150a10]/40 to-[#0c0a09]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vh] bg-rose-950/20 rounded-full blur-[90px] pointer-events-none" />
 
             {/* Dark gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20 z-10" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20 z-10 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 to-transparent z-10 pointer-events-none" />
 
             {/* Main Media (Image or Video) */}
             <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-8 md:p-12 z-10">
@@ -233,30 +223,31 @@ export default function StoryTimeline() {
                   loop
                   muted
                   playsInline
-                  className="max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-2xl shadow-black/80 border border-white/10"
+                  className="max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10 gpu-accelerated"
                 />
               ) : (
                 <img
                   src={slide.image}
                   alt={slide.title}
-                  className="max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-2xl shadow-black/80 border border-white/10"
+                  className="max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10 gpu-accelerated"
                   loading="eager"
+                  decoding="async"
                 />
               )}
             </div>
           </div>
         ))}
 
-        {/* Narrative Texts Layer directly over the photo */}
+        {/* Narrative Texts Layer directly over the photo (GPU Accelerated) */}
         {storySlides.map((slide, i) => (
           <div
             key={`text-${slide.id}`}
             data-text={i}
-            className="absolute bottom-0 left-0 right-0 z-40 px-6 sm:px-12 md:px-20 pb-10 sm:pb-14 pointer-events-none"
+            className="absolute bottom-0 left-0 right-0 z-40 px-6 sm:px-12 md:px-20 pb-10 sm:pb-14 pointer-events-none gpu-accelerated"
             style={{ opacity: i === 0 ? 1 : 0 }}
           >
             <div className="max-w-3xl">
-              <div className="flex items-center gap-3 mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+              <div className="flex items-center gap-3 mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                 <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-rose-400 tracking-wider uppercase">
                   <FaCalendarAlt className="w-3.5 h-3.5" />
                   {slide.date}
@@ -266,16 +257,16 @@ export default function StoryTimeline() {
                 </span>
               </div>
 
-              <h2 className="text-white text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-3 drop-shadow-[0_3px_10px_rgba(0,0,0,0.95)]">
+              <h2 className="text-white text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
                 {slide.title}
               </h2>
 
-              <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] max-w-2xl">
+              <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] max-w-2xl">
                 {slide.description}
               </p>
 
               {slide.highlight && (
-                <div className="flex items-start gap-2 text-rose-300 text-xs sm:text-sm italic font-serif drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                <div className="flex items-start gap-2 text-rose-300 text-xs sm:text-sm italic font-serif drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                   <FaQuoteLeft className="w-3 h-3 shrink-0 text-rose-400 mt-0.5" />
                   <span>{slide.highlight}</span>
                 </div>
@@ -284,20 +275,22 @@ export default function StoryTimeline() {
           </div>
         ))}
 
-        {/* Vertical Dot Navigation Indicator */}
-        <div className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-auto max-h-[70vh] overflow-y-auto py-2 opacity-50 hover:opacity-100 transition-opacity">
+        {/* Vertical Dot Navigation Indicator (Zero clipping with proper padding) */}
+        <div className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-2.5 pointer-events-auto max-h-[75vh] py-3 px-3 overflow-visible opacity-55 hover:opacity-100 transition-opacity">
           {storySlides.map((_, i) => (
-            <button
-              key={`dot-${i}`}
-              data-dot={i}
-              onClick={() => scrollToSlideIndex(i)}
-              className="w-2.5 h-2.5 rounded-full border border-white/40 transition-all duration-300 cursor-pointer hover:border-rose-400 hover:scale-125"
-              style={{
-                backgroundColor: i === 0 ? '#f43f5e' : 'transparent',
-                borderColor: i === 0 ? '#fda4af' : 'rgba(255, 255, 255, 0.35)',
-              }}
-              title={`Momento ${i + 1}`}
-            />
+            <div key={`dot-wrapper-${i}`} className="flex items-center justify-center w-4 h-4">
+              <button
+                data-dot={i}
+                onClick={() => scrollToSlideIndex(i)}
+                className="w-2.5 h-2.5 rounded-full border border-white/40 transition-all duration-300 cursor-pointer hover:border-rose-400 hover:scale-125"
+                style={{
+                  backgroundColor: i === 0 ? '#f43f5e' : 'transparent',
+                  borderColor: i === 0 ? '#fda4af' : 'rgba(255, 255, 255, 0.35)',
+                  boxShadow: i === 0 ? '0 0 8px rgba(244, 63, 94, 0.7)' : 'none',
+                }}
+                title={`Momento ${i + 1}`}
+              />
+            </div>
           ))}
         </div>
       </div>
