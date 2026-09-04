@@ -53,7 +53,7 @@ export const storySlides = [
     id: "saga-da-vela-gattai",
     date: "05 de Julho",
     tagline: "Saga da vela II",
-    title: "A vela no Gattai",
+    title: "Gattai",
     image: "/images/20260705_171334.webp",
     description:
       "No Gattai a história se repetiu e a Clara ficou de vela de novo. O Brasil tinha perdido para a Holanda e ela estava com sentimentos mistos: frustrada por não ter visto Ste, mas aliviada por não tê-la levado para um date onde o Brasil perdeu logo de início. No fim, estar com você transformou qualquer clima em risada.",
