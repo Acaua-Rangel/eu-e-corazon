@@ -237,35 +237,24 @@ export default function StoryTimeline() {
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20 z-10 pointer-events-none" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 to-transparent z-10 pointer-events-none" />
 
-            {/* Main Media (Image or Video) Card Frame */}
+            {/* Main Media (Image or Video) */}
             <div className="relative w-full h-full flex items-center justify-center p-3 sm:p-8 md:p-12 z-10">
-              <div className="relative w-full max-w-[92vw] md:max-w-[72vw] h-[64dvh] sm:h-[75vh] md:h-[80vh] flex items-center justify-center rounded-2xl shadow-xl shadow-black/70 border border-white/10 overflow-hidden bg-black/40 backdrop-blur-sm">
-                {/* Ambient backdrop inside card */}
-                {slide.image && (
-                  <img
-                    src={slide.image}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 w-full h-full object-cover filter blur-xl opacity-20 scale-110 pointer-events-none"
-                  />
-                )}
-                {slide.video ? (
-                  <video
-                    src={slide.video}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="relative z-10 w-full h-full object-contain"
-                  />
-                ) : (
-                  <img
-                    src={slide.image}
-                    alt={slide.title}
-                    className="relative z-10 w-full h-full object-contain"
-                  />
-                )}
-              </div>
+              {slide.video ? (
+                <video
+                  src={slide.video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full max-w-[92vw] md:max-w-[72vw] max-h-[92dvh] sm:max-h-[88vh] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10"
+                />
+              ) : (
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="w-full max-w-[92vw] md:max-w-[72vw] max-h-[92dvh] sm:max-h-[88vh] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10"
+                />
+              )}
             </div>
           </div>
         ))}
