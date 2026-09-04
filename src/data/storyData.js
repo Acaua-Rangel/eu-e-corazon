@@ -24,20 +24,10 @@ export const storySlides = [
     date: "21 de Junho",
     tagline: "Certeza",
     title: "Certeza de nós dois",
-    image: "/images/20260621_214428.webp",
+    image: "/images/20260621_214435.webp",
     description:
       "Dois dias depois, fomos passear no shopping. Foi naquele dia que eu tive a certeza de que engataríamos um relacionamento. A nossa sintonia, a química, as risadas e até a nossa proximidade me passavam a sensação de que a gente já estava junto há muito tempo. Estar com você parecia tão natural quanto respirar.",
     highlight: "Ali eu soube: não era só um momento, era o começo de nós dois."
-  },
-  {
-    id: "shopping-certeza-2",
-    date: "21 de Junho",
-    tagline: "Carinho",
-    title: "Aquele beijo",
-    image: "/images/20260621_214435.webp",
-    description:
-      "Você me abraçando, beijando minha bochecha com aquele sorriso que desmonta qualquer armadura minha. Olhar para essas fotos me faz reviver exatamente o que senti: a paz e a alegria de ter encontrado alguém tão especial.",
-    highlight: "Seu carinho virou o meu lugar favorito no mundo."
   },
   {
     id: "bar-jogo-brasil",
