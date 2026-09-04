@@ -1,123 +1,223 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Observer } from 'gsap/Observer';
 import { storySlides } from '../data/storyData';
 import { FaCalendarAlt, FaQuoteLeft } from 'react-icons/fa';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(Observer);
 
 export default function StoryTimeline() {
   const containerRef = useRef(null);
   const totalSlides = storySlides.length;
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // Sensibilidade calibrada: 240px de scroll por slide
-      const scrollPerSlide = 240;
-      const totalScrollDistance = (totalSlides - 1) * scrollPerSlide;
-      const segmentDuration = 1;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const currentIndex = useRef(0);
+  const isAnimating = useRef(false);
+  const observerRef = useRef(null);
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          id: 'story-scroll-trigger',
-          trigger: containerRef.current,
-          start: 'top top',
-          end: `+=${totalScrollDistance}px`,
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.35,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            const activeIndex = Math.min(
-              Math.floor(progress * totalSlides),
-              totalSlides - 1
-            );
+  const goToSlide = useCallback((toIndex) => {
+    if (isAnimating.current || toIndex === currentIndex.current) return;
+    if (toIndex < 0 || toIndex >= totalSlides) return;
 
-            // Update dots
-            const dots = containerRef.current.querySelectorAll('[data-dot]');
-            dots.forEach((dot, j) => {
-              if (j === activeIndex) {
-                dot.style.backgroundColor = '#f43f5e';
-                dot.style.borderColor = '#fda4af';
-                dot.style.transform = 'scale(1.35)';
-              } else {
-                dot.style.backgroundColor = 'transparent';
-                dot.style.borderColor = 'rgba(255, 255, 255, 0.35)';
-                dot.style.transform = 'scale(1)';
-              }
-            });
-          },
+    isAnimating.current = true;
+    const fromIndex = currentIndex.current;
+    const direction = toIndex > fromIndex ? 1 : -1;
+
+    const fromSlide = containerRef.current?.querySelector(`[data-slide="${fromIndex}"]`);
+    const toSlide = containerRef.current?.querySelector(`[data-slide="${toIndex}"]`);
+    const fromText = containerRef.current?.querySelector(`[data-text="${fromIndex}"]`);
+    const toText = containerRef.current?.querySelector(`[data-text="${toIndex}"]`);
+
+    if (fromSlide) fromSlide.style.zIndex = '10';
+    if (toSlide) toSlide.style.zIndex = '20';
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power2.inOut' },
+      onComplete: () => {
+        currentIndex.current = toIndex;
+        setActiveIndex(toIndex);
+        // Cool-down buffer to absorb fast wheel momentum
+        setTimeout(() => {
+          isAnimating.current = false;
+        }, 220);
+      },
+    });
+
+    // 1. Fade out current text
+    if (fromText) {
+      tl.to(
+        fromText,
+        {
+          opacity: 0,
+          y: direction * -20,
+          duration: 0.28,
+          ease: 'power2.in',
         },
-      });
+        0
+      );
+    }
 
-      // Build crossfade and text transitions for each slide
-      for (let i = 1; i < totalSlides; i++) {
-        const slideEl = containerRef.current.querySelector(`[data-slide="${i}"]`);
-        const textEl = containerRef.current.querySelector(`[data-text="${i}"]`);
-        const prevTextEl = containerRef.current.querySelector(`[data-text="${i - 1}"]`);
-        const pos = (i - 1) * segmentDuration;
+    // 2. Crossfade images
+    if (fromSlide) {
+      tl.to(
+        fromSlide,
+        {
+          opacity: 0,
+          scale: 0.98,
+          duration: 0.55,
+          ease: 'power2.inOut',
+        },
+        0.05
+      );
+    }
 
-        // Fade out previous text
-        tl.to(
-          prevTextEl,
-          {
-            opacity: 0,
-            y: -30,
-            duration: segmentDuration * 0.4,
-            ease: 'power1.in',
-          },
-          pos
-        );
+    if (toSlide) {
+      tl.fromTo(
+        toSlide,
+        {
+          opacity: 0,
+          scale: 1.03,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.58,
+          ease: 'power2.out',
+        },
+        0.08
+      );
+    }
 
-        // Crossfade image
-        tl.to(
-          slideEl,
-          {
-            opacity: 1,
-            duration: segmentDuration * 0.6,
-            ease: 'none',
-          },
-          pos + segmentDuration * 0.2
-        );
-
-        // Fade in new text
-        tl.fromTo(
-          textEl,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: segmentDuration * 0.4,
-            ease: 'power1.out',
-          },
-          pos + segmentDuration * 0.6
-        );
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
+    // 3. Fade in new text
+    if (toText) {
+      tl.fromTo(
+        toText,
+        {
+          opacity: 0,
+          y: direction * 20,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.42,
+          ease: 'power2.out',
+        },
+        0.22
+      );
+    }
   }, [totalSlides]);
 
-  const scrollToSlideIndex = (index) => {
-    const trigger = ScrollTrigger.getById('story-scroll-trigger');
-    if (!trigger) return;
-    const target = trigger.start + (index / (totalSlides - 1)) * (trigger.end - trigger.start);
-    window.scrollTo({ top: target, behavior: 'smooth' });
-  };
+  const handleNext = useCallback(() => {
+    if (isAnimating.current) return;
+    if (currentIndex.current < totalSlides - 1) {
+      goToSlide(currentIndex.current + 1);
+    } else {
+      // Last slide reached: proceed to closing section
+      const closingEl = document.getElementById('closing-section');
+      if (closingEl) {
+        observerRef.current?.disable();
+        closingEl.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [goToSlide, totalSlides]);
+
+  const handlePrev = useCallback(() => {
+    if (isAnimating.current) return;
+    if (currentIndex.current > 0) {
+      goToSlide(currentIndex.current - 1);
+    } else {
+      // First slide: return to hero section
+      const heroEl = document.getElementById('hero-section');
+      if (heroEl) {
+        observerRef.current?.disable();
+        heroEl.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [goToSlide]);
+
+  useLayoutEffect(() => {
+    const target = containerRef.current;
+    if (!target) return;
+
+    // Create GSAP Observer for strictly discrete slide steps (1 step per gesture)
+    const obs = Observer.create({
+      target,
+      type: 'wheel,touch,pointer',
+      wheelSpeed: -1,
+      tolerance: 15,
+      preventDefault: true,
+      onDown: () => handleNext(),
+      onUp: () => handlePrev(),
+    });
+
+    observerRef.current = obs;
+
+    return () => {
+      obs.kill();
+    };
+  }, [handleNext, handlePrev]);
+
+  // Activate/Deactivate observer when section is in view
+  useEffect(() => {
+    const target = containerRef.current;
+    if (!target) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+            observerRef.current?.enable();
+          } else {
+            observerRef.current?.disable();
+          }
+        });
+      },
+      { threshold: [0.1, 0.45, 0.8] }
+    );
+
+    io.observe(target);
+    return () => io.disconnect();
+  }, []);
+
+  // Keyboard navigation support
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const target = containerRef.current;
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const inView = rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2;
+      if (!inView) return;
+
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+        e.preventDefault();
+        handleNext();
+      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault();
+        handlePrev();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, { passive: false });
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleNext, handlePrev]);
 
   return (
-    <section id="story-timeline" className="relative w-full">
+    <section id="story-timeline" className="relative w-full h-screen overflow-hidden">
       <div
         ref={containerRef}
-        className="relative w-screen h-screen overflow-hidden bg-[#0c0a09]"
+        className="relative w-full h-full overflow-hidden bg-[#0c0a09] select-none"
       >
         {/* Images Layer */}
         {storySlides.map((slide, i) => (
           <div
             key={slide.id}
             data-slide={i}
-            className="absolute inset-0 w-full h-full"
-            style={{ opacity: i === 0 ? 1 : 0, zIndex: i }}
+            className="absolute inset-0 w-full h-full transition-opacity duration-300"
+            style={{
+              opacity: i === 0 ? 1 : 0,
+              zIndex: i === 0 ? 20 : 10,
+              pointerEvents: i === activeIndex ? 'auto' : 'none',
+            }}
           >
             {/* Blurred backdrop for portrait images */}
             <div
@@ -178,19 +278,17 @@ export default function StoryTimeline() {
           </div>
         ))}
 
-
-
         {/* Vertical Dot Navigation Indicator */}
         <div className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-auto max-h-[70vh] overflow-y-auto py-2 opacity-50 hover:opacity-100 transition-opacity">
           {storySlides.map((_, i) => (
             <button
               key={`dot-${i}`}
-              data-dot={i}
-              onClick={() => scrollToSlideIndex(i)}
-              className="w-2.5 h-2.5 rounded-full border border-white/40 transition-all duration-300 cursor-pointer hover:border-rose-400 hover:scale-125"
+              onClick={() => goToSlide(i)}
+              className="w-2.5 h-2.5 rounded-full border transition-all duration-300 cursor-pointer hover:border-rose-400 hover:scale-125"
               style={{
-                backgroundColor: i === 0 ? '#f43f5e' : 'transparent',
-                borderColor: i === 0 ? '#fda4af' : 'rgba(255, 255, 255, 0.35)',
+                backgroundColor: i === activeIndex ? '#f43f5e' : 'transparent',
+                borderColor: i === activeIndex ? '#fda4af' : 'rgba(255, 255, 255, 0.35)',
+                transform: i === activeIndex ? 'scale(1.35)' : 'scale(1)',
               }}
               title={`Momento ${i + 1}`}
             />
