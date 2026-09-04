@@ -6,8 +6,8 @@ export const storySlides = [
     title: "O primeiro story",
     image: "/images/20260613.webp",
     description:
-      "Tudo começou por um acaso do destino no dia 13 de junho. Sua irmã precisava de companhia para ir ao estádio assistir ao jogo de futebol. Eu não pude ir naquele dia, e você foi acompanhá-la. Quando eu vi aquele story da sua irmã e te vi ali, não pensei duas vezes: te chamei de linda. A partir daquela resposta, a gente não parou mais de conversar.",
-    highlight: "Um story despretensioso que mudou a minha vida para sempre."
+      "Tudo começou no dia 13 de junho. A ideia inicial era ir a um bar ver o jogo, mas eu não podia ir e você também não queria ir a um bar. Então vocês foram assistir no salão do prédio. Quando vi o story dela com você, te chamei de linda sem pretensão nenhuma — eu estava até de celibato e achei que Clara só fosse rir e me ignorar. Falei porque você realmente era linda (e continua sendo). Só que a conversa rendeu e nunca mais paramos de nos falar.",
+    highlight: "Um elogio sincero e sem pretensão que mudou a minha vida."
   },
   {
     id: "primeiro-dia-casa-dela",
