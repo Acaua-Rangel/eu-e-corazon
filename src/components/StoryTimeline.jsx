@@ -238,7 +238,7 @@ export default function StoryTimeline() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 to-transparent z-10 pointer-events-none" />
 
             {/* Main Media (Image or Video) */}
-            <div className="relative w-full h-full flex items-center justify-center p-3 sm:p-8 md:p-12 z-10">
+            <div className="relative w-full h-full flex items-center justify-center p-0 sm:p-8 md:p-12 z-10">
               {slide.video ? (
                 <video
                   src={slide.video}
@@ -246,13 +246,13 @@ export default function StoryTimeline() {
                   loop
                   muted
                   playsInline
-                  className="max-h-[72vh] sm:max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10"
+                  className="w-full max-w-full sm:max-w-[90vw] md:max-w-[72vw] h-full max-h-[82vh] sm:max-h-[82vh] object-contain rounded-none sm:rounded-2xl shadow-xl shadow-black/70 border-0 sm:border sm:border-white/10"
                 />
               ) : (
                 <img
                   src={slide.image}
                   alt={slide.title}
-                  className="max-h-[72vh] sm:max-h-[82vh] max-w-[92vw] md:max-w-[72vw] object-contain rounded-2xl shadow-xl shadow-black/70 border border-white/10"
+                  className="w-full max-w-full sm:max-w-[90vw] md:max-w-[72vw] h-full max-h-[82vh] sm:max-h-[82vh] object-contain rounded-none sm:rounded-2xl shadow-xl shadow-black/70 border-0 sm:border sm:border-white/10"
                 />
               )}
             </div>
