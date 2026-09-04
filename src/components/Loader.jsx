@@ -34,7 +34,7 @@ const LogoSVGLoader = () => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMidYMid meet"
-        className="w-[180px] h-[130px] sm:w-[240px] sm:h-[170px] drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]"
+        className="w-45 h-32.5 sm:w-60 sm:h-42.5 drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]"
       >
         <path
           ref={pathRef}
@@ -125,11 +125,11 @@ export default function Loader({ onLoadComplete }) {
   return (
     <div
       ref={loaderRef}
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-rose-950 via-red-900 to-rose-900 px-6 select-none"
+      className="fixed inset-0 z-9999 flex flex-col items-center justify-center overflow-hidden bg-linear-to-br from-rose-950 via-red-900 to-rose-900 px-6 select-none"
     >
       {/* Background glow effects */}
-      <div className="absolute w-[500px] h-[500px] bg-red-600/20 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute w-[300px] h-[300px] bg-white/5 rounded-full blur-[90px] pointer-events-none" />
+      <div className="absolute w-125 h-125 bg-red-600/20 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute w-75 h-75 bg-white/5 rounded-full blur-[90px] pointer-events-none" />
 
       {/* Center content */}
       <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-sm text-center">

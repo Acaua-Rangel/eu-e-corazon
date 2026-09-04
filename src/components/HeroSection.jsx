@@ -97,7 +97,7 @@ export default function HeroSection({ onStartStory, isReady = true }) {
     <section
       id="hero-section"
       ref={containerRef}
-      className="relative min-h-screen w-full flex flex-col items-center justify-center text-center px-6 overflow-hidden bg-gradient-to-b from-[#0c0a09] via-[#1c1218] to-[#0c0a09]"
+      className="relative min-h-screen w-full flex flex-col items-center justify-center text-center px-6 overflow-hidden bg-linear-to-b from-[#0c0a09] via-[#1c1218] to-[#0c0a09]"
     >
       {/* Background photo (faint/subtle) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -106,11 +106,11 @@ export default function HeroSection({ onStartStory, isReady = true }) {
           alt="Memória"
           className="w-full h-full object-cover object-center opacity-15 filter blur-[1px] scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/75 via-transparent to-[#0c0a09]" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#0c0a09]/75 via-transparent to-[#0c0a09]" />
       </div>
 
       {/* Background glow effects */}
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-rose-600/15 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-150 h-150 bg-rose-600/15 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Floating subtle hearts background */}
@@ -137,7 +137,7 @@ export default function HeroSection({ onStartStory, isReady = true }) {
                 key={idx}
                 className={`hero-word inline-block mr-2 sm:mr-3.5 opacity-0 ${
                   isSpecial
-                    ? 'text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-pink-400 to-rose-500 font-serif italic'
+                    ? 'text-transparent bg-clip-text bg-linear-to-r from-rose-400 via-pink-400 to-rose-500 font-serif italic'
                     : ''
                 }`}
               >
@@ -156,7 +156,7 @@ export default function HeroSection({ onStartStory, isReady = true }) {
         <div className="hero-cta flex flex-col sm:flex-row items-center gap-4 opacity-0">
           <button
             onClick={onStartStory}
-            className="px-8 py-3.5 rounded-full text-base font-semibold bg-gradient-to-r from-rose-500 via-rose-600 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white shadow-xl shadow-rose-500/30 transition-all cursor-pointer hover:scale-105 active:scale-95 flex items-center gap-2"
+            className="px-8 py-3.5 rounded-full text-base font-semibold bg-linear-to-r from-rose-500 via-rose-600 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white shadow-xl shadow-rose-500/30 transition-all cursor-pointer hover:scale-105 active:scale-95 flex items-center gap-2"
           >
             <span>Ver nossa história</span>
             <FaChevronDown className="w-3.5 h-3.5 animate-bounce" />

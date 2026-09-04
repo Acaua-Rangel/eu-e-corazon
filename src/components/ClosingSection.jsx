@@ -8,11 +8,11 @@ export default function ClosingSection() {
   return (
     <section
       id="closing-section"
-      className="relative min-h-screen w-full flex flex-col items-center justify-center px-6 py-24 text-center bg-gradient-to-b from-[#0c0a09] via-[#1a0f16] to-[#0c0a09] overflow-hidden select-none"
+      className="relative min-h-screen w-full flex flex-col items-center justify-center px-6 py-24 text-center bg-linear-to-b from-[#0c0a09] via-[#1a0f16] to-[#0c0a09] overflow-hidden select-none"
     >
       {/* Background glow effects */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-rose-600/15 rounded-full blur-[160px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-175 bg-rose-600/15 rounded-full blur-[160px]" />
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px]" />
       </div>
 
@@ -23,7 +23,7 @@ export default function ClosingSection() {
         </div>
 
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-8 leading-tight">
-          E cada um desses dias se tornou <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-pink-300 to-rose-500 font-serif italic">inesquecível</span> ao seu lado.
+          E cada um desses dias se tornou <span className="text-transparent bg-clip-text bg-linear-to-r from-rose-400 via-pink-300 to-rose-500 font-serif italic">inesquecível</span> ao seu lado.
         </h2>
 
         <div className="bg-black/55 backdrop-blur-xl p-8 sm:p-10 rounded-3xl border border-white/10 shadow-2xl mb-10 max-w-2xl text-left text-white/80 space-y-4 text-base sm:text-lg leading-relaxed">

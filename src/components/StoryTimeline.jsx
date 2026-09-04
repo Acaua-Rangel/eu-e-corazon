@@ -220,7 +220,7 @@ export default function StoryTimeline() {
     <section id="story-timeline" className="relative w-full">
       <div
         ref={containerRef}
-        className="relative w-full h-[100dvh] overflow-hidden bg-[#0c0a09] select-none"
+        className="relative w-full h-dvh overflow-hidden bg-linear-to-b from-[#0c0a09] via-[#1a0f16] to-[#0c0a09] select-none"
       >
         {/* Images / Videos Layer */}
         {storySlides.map((slide, i) => (
@@ -231,11 +231,11 @@ export default function StoryTimeline() {
             style={{ zIndex: i }}
           >
             {/* Ambient Lighting Backdrop (Lightweight, 0% GPU penalty) */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/70 via-[#13090e]/50 to-[#0c0a09] pointer-events-none" />
+            <div className="absolute inset-0 bg-linear-to-b from-[#0c0a09]/70 via-[#13090e]/50 to-[#0c0a09] pointer-events-none" />
 
             {/* Dark gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20 z-10 pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-black/20 z-10 pointer-events-none" />
+            <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/15 to-transparent z-10 pointer-events-none" />
 
             {/* Main Media (Image or Video) */}
             <div className="relative w-full h-full flex items-center justify-center p-3 sm:p-8 md:p-12 z-10">
