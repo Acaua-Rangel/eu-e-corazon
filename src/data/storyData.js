@@ -92,12 +92,12 @@ export const storySlides = [
   {
     id: "museu-arte-bahia-4",
     date: "11 de Julho",
-    tagline: "Nós dois no Palacete",
-    title: "Nós dois no museu",
-    image: "/images/IMG-20260711-WA0050.webp",
+    tagline: "Entre os museus",
+    title: "O olhar",
+    image: "/images/IMG-20260711-WA0018.webp",
     description:
-      "Nós dois juntos, você segurando meu braço, aquele look impecável com a camisa rosa e você incrível de preto. Aquele dia foi tão bom que eu não queria que terminasse.",
-    highlight: "Momentos que a gente guarda para a vida toda."
+      "Entre um museu e outro, fomos numa sorveteria ali perto. Entre o caixa e a hora de pedir o sorvete, você me olhou de um jeito que me encantou completamente. Foi um olhar de admiração e carinho que me fez pensar: é por ela que eu quero me esforçar.",
+    highlight: "Aquele olhar me deu a certeza de que valia a pena me esforçar por você."
   },
   {
     id: "tinta-3d-cosplay",
