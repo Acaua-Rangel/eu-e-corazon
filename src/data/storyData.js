@@ -106,7 +106,7 @@ export const storySlides = [
     title: "O traje do Homem-Aranha",
     image: "/images/IMG-20260805-WA0026.webp",
     description:
-      "A gente se planejou com antecedência para ir ao Bon Odori de cosplay combinando. Eu comprei o traje do Homem-Aranha indiano (Pavitr Prabhakar) e, como eu gosto de caprichar nos detalhes, decidimos personalizar tudo com tinta tridimensional Acrilex 3D em alto relevo.",
+      "A gente se planejou com antecedência para ir ao Bon Odori de cosplay combinando. Eu comprei o traje do Homem-Aranha indiano (Pavitr Prabhakar) e, como eu gosto de caprichar nos detalhes, decidimos personalizar tudo com tinta tridimensional.",
     highlight: "Dedicação aos detalhes em tudo que a gente constrói junto."
   },
   {
