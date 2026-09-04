@@ -43,7 +43,7 @@ export const storySlides = [
     id: "saga-da-vela-madero",
     date: "29 de Junho",
     tagline: "Saga da vela I",
-    title: "A vela no Madero",
+    title: "Madero",
     video: "/videos/VID-20260629-WA0004.mp4",
     description:
       "A gente combinou um date no Salvador Shopping e a ideia original era ser um date duplo. Só que a outra pessoa não foi... e quem sobrou de vela com a gente foi a Clara. Foi hambúrguer no Madero, muitas risadas da situação e mais um episódio clássico da nossa história.",
@@ -53,7 +53,7 @@ export const storySlides = [
     id: "saga-da-vela-gattai",
     date: "05 de Julho",
     tagline: "Saga da vela II",
-    title: "A vela no Gattai",
+    title: "Gattai",
     image: "/images/20260705_171334.webp",
     description:
       "No Gattai a história se repetiu e a Clara ficou de vela de novo. Mas o que mais marcou foi a nossa cumplicidade e como a gente estava cada vez mais grudado.",
