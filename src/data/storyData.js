@@ -6,7 +6,7 @@ export const storySlides = [
     title: "O primeiro story",
     image: "/images/20260613.webp",
     description:
-      "Tudo começou no dia 13 de junho. A ideia inicial era ir a um bar ver o jogo, mas eu não podia ir e você também não queria ir a um bar. Então vocês foram assistir no salão do prédio. Quando vi o story dela com você, te chamei de linda sem pretensão nenhuma — eu estava até de celibato e achei que Clara só fosse rir e me ignorar. Falei porque você realmente era linda (e continua sendo). Só que a conversa rendeu e nunca mais paramos de nos falar.",
+      "Tudo começou no dia 13 de junho. A ideia inicial era ir a um bar ver o jogo, mas eu não podia ir e você já tinha marcado de assistir com seus amigos. Então vocês foram assistir no salão do prédio. Quando vi o story de Clara com você, te chamei de linda sem pretensão nenhuma — eu estava até de celibato e achei que Clara só fosse rir e me ignorar. Falei porque você realmente era linda (e continua sendo). Só que a conversa rendeu e nunca mais paramos de nos falar.",
     highlight: "Um elogio sincero e sem pretensão que mudou a minha vida."
   },
   {
@@ -16,8 +16,8 @@ export const storySlides = [
     title: "Assistindo ao jogo",
     image: "/images/IMG-20260619-WA0043.webp",
     description:
-      "No dia 19, fui até a sua casa para a gente assistir juntos ao jogo do Brasil. Chegando lá, o salão onde ia passar a transmissão estava fechado. Mas nada disso importava: fomos para a sala de jogos e começamos a assistir ao jogo juntos, na tela do celular, enquanto a conversa fluía como se já nos conhecêssemos há muito tempo. Foi ali que a gente começou a ficar de verdade.",
-    highlight: "O salão fechado virou o melhor cenário do mundo só porque eu estava com você."
+      "No dia 19, fui até a sua casa para a gente assistir juntos ao jogo do Brasil contra o Japão. O salão estava fechado, então fomos para a sala de jogos assistir pela tela do celular. O jogo foi super acirrado e a gente dava um beijo a cada gol do Brasil — no final já estávamos quase achando que o Brasil ia perder! Mas foi ali que começamos a ficar de verdade.",
+    highlight: "Um beijo a cada gol e o início de nós dois."
   },
   {
     id: "shopping-certeza-1",
@@ -53,11 +53,11 @@ export const storySlides = [
     id: "saga-da-vela-gattai",
     date: "05 de Julho",
     tagline: "Saga da vela II",
-    title: "Gattai",
+    title: "A vela no Gattai",
     image: "/images/20260705_171334.webp",
     description:
-      "No Gattai a história se repetiu e a Clara ficou de vela de novo. Mas o que mais marcou foi a nossa cumplicidade e como a gente estava cada vez mais grudado.",
-    highlight: "A cumplicidade que só aumentava."
+      "No Gattai a história se repetiu e a Clara ficou de vela de novo. O Brasil tinha perdido para a Holanda e ela estava com sentimentos mistos: frustrada por não ter visto Ste, mas aliviada por não tê-la levado para um date onde o Brasil perdeu logo de início. No fim, estar com você transformou qualquer clima em risada.",
+    highlight: "Mais um episódio clássico da Clara de vela com a gente."
   },
   {
     id: "museu-arte-bahia-1",
