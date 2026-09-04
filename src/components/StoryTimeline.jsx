@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useEffect, useState, useCallback } from 'react';
+import React, { useLayoutEffect, useRef, useEffect, useState, useCallback, memo } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { storySlides } from '../data/storyData';
@@ -9,6 +9,28 @@ gsap.registerPlugin(ScrollTrigger);
 // Prevent mobile address bar show/hide from causing layout jitter
 ScrollTrigger.config({
   ignoreMobileResize: true,
+});
+
+const StoryDots = memo(({ total, activeIndex, onSelect }) => {
+  return (
+    <div className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-2 pointer-events-auto max-h-[75vh] py-2 px-2 overflow-visible opacity-70 hover:opacity-100 transition-opacity">
+      {Array.from({ length: total }).map((_, i) => (
+        <div key={`dot-wrapper-${i}`} className="flex items-center justify-center w-3.5 h-3.5">
+          <button
+            onClick={() => onSelect(i)}
+            className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border transition-all duration-300 cursor-pointer"
+            style={{
+              backgroundColor: i === activeIndex ? '#f43f5e' : 'transparent',
+              borderColor: i === activeIndex ? '#fda4af' : 'rgba(255, 255, 255, 0.4)',
+              transform: i === activeIndex ? 'scale(1.35)' : 'scale(1)',
+              boxShadow: i === activeIndex ? '0 0 8px rgba(244, 63, 94, 0.8)' : 'none',
+            }}
+            title={`Momento ${i + 1}`}
+          />
+        </div>
+      ))}
+    </div>
+  );
 });
 
 export default function StoryTimeline() {
@@ -30,6 +52,18 @@ export default function StoryTimeline() {
       const totalScrollDistance = (totalSlides - 1) * scrollPerSlide;
       const segmentDuration = 1;
 
+      // Initialize all slides and texts once via GSAP
+      storySlides.forEach((_, i) => {
+        const slideEl = containerRef.current?.querySelector(`[data-slide="${i}"]`);
+        const textEl = containerRef.current?.querySelector(`[data-text="${i}"]`);
+        if (slideEl) {
+          gsap.set(slideEl, { opacity: i === 0 ? 1 : 0 });
+        }
+        if (textEl) {
+          gsap.set(textEl, { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 18 });
+        }
+      });
+
       const tl = gsap.timeline({
         scrollTrigger: {
           id: 'story-scroll-trigger',
@@ -38,16 +72,14 @@ export default function StoryTimeline() {
           end: `+=${totalScrollDistance}px`,
           pin: true,
           pinSpacing: true,
-          pinType: 'transform',
-          anticipatePin: 1,
-          scrub: 0.25,
+          scrub: 0.2,
           onUpdate: (self) => {
             const progress = self.progress;
             const newIndex = Math.min(
-              Math.floor(progress * totalSlides + 0.05),
+              Math.max(Math.round(progress * (totalSlides - 1)), 0),
               totalSlides - 1
             );
-            setActiveIndex(newIndex);
+            setActiveIndex((prev) => (prev !== newIndex ? newIndex : prev));
           },
         },
       });
@@ -88,9 +120,8 @@ export default function StoryTimeline() {
 
         // Fade in current text
         if (textEl) {
-          tl.fromTo(
+          tl.to(
             textEl,
-            { opacity: 0, y: 18 },
             {
               opacity: 1,
               y: 0,
@@ -196,12 +227,8 @@ export default function StoryTimeline() {
           <div
             key={slide.id}
             data-slide={i}
-            className="absolute inset-0 w-full h-full"
-            style={{
-              opacity: i === 0 ? 1 : 0,
-              zIndex: i,
-              pointerEvents: i === activeIndex ? 'auto' : 'none',
-            }}
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            style={{ zIndex: i }}
           >
             {/* Ambient Lighting Backdrop (Lightweight, 0% GPU penalty) */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/70 via-[#13090e]/50 to-[#0c0a09] pointer-events-none" />
@@ -238,7 +265,6 @@ export default function StoryTimeline() {
             key={`text-${slide.id}`}
             data-text={i}
             className="absolute bottom-0 left-0 right-0 z-40 px-5 sm:px-12 md:px-20 pb-8 sm:pb-12 pointer-events-none"
-            style={{ opacity: i === 0 ? 1 : 0 }}
           >
             <div className="max-w-3xl">
               <div className="flex items-center gap-2.5 mb-1.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
@@ -269,25 +295,14 @@ export default function StoryTimeline() {
           </div>
         ))}
 
-        {/* Vertical Dot Navigation Indicator (Synchronized via React State + No Clipping) */}
-        <div className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-2 pointer-events-auto max-h-[75vh] py-2 px-2 overflow-visible opacity-70 hover:opacity-100 transition-opacity">
-          {storySlides.map((_, i) => (
-            <div key={`dot-wrapper-${i}`} className="flex items-center justify-center w-3.5 h-3.5">
-              <button
-                onClick={() => scrollToSlideIndex(i)}
-                className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border transition-all duration-300 cursor-pointer"
-                style={{
-                  backgroundColor: i === activeIndex ? '#f43f5e' : 'transparent',
-                  borderColor: i === activeIndex ? '#fda4af' : 'rgba(255, 255, 255, 0.4)',
-                  transform: i === activeIndex ? 'scale(1.35)' : 'scale(1)',
-                  boxShadow: i === activeIndex ? '0 0 8px rgba(244, 63, 94, 0.8)' : 'none',
-                }}
-                title={`Momento ${i + 1}`}
-              />
-            </div>
-          ))}
-        </div>
+        {/* Vertical Dot Navigation Indicator */}
+        <StoryDots
+          total={totalSlides}
+          activeIndex={activeIndex}
+          onSelect={scrollToSlideIndex}
+        />
       </div>
     </section>
   );
 }
+
