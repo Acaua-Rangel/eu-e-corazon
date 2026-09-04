@@ -16,8 +16,8 @@ export const storySlides = [
     title: "Assistindo ao jogo",
     image: "/images/IMG-20260619-WA0043.webp",
     description:
-      "No dia 19, fui até a sua casa para a gente assistir juntos ao jogo do Brasil contra o Japão. O salão estava fechado, então fomos para a sala de jogos assistir pela tela do celular. O jogo foi super acirrado e a gente dava um beijo a cada gol do Brasil — no final já estávamos quase achando que o Brasil ia perder! Mas foi ali que começamos a ficar de verdade.",
-    highlight: "Um beijo a cada gol e o início de nós dois."
+      "No dia 19, fui até a sua casa para a gente assistir juntos ao jogo do Brasil. Chegando lá, o salão onde ia passar a transmissão estava fechado. Mas nada disso importava: fomos para a sala de jogos e começamos a assistir ao jogo juntos, na tela do celular, enquanto a conversa fluía como se já nos conhecêssemos há muito tempo. Foi ali que a gente começou a ficar de verdade.",
+    highlight: "O salão fechado virou o melhor cenário do mundo só porque eu estava com você."
   },
   {
     id: "shopping-certeza-1",
@@ -46,8 +46,8 @@ export const storySlides = [
     title: "Madero",
     video: "/videos/VID-20260629-WA0004.mp4",
     description:
-      "A gente combinou um date no Salvador Shopping e a ideia original era ser um date duplo. Só que a outra pessoa não foi... e quem sobrou de vela com a gente foi a Clara. Foi hambúrguer no Madero, muitas risadas da situação e mais um episódio clássico da nossa história.",
-    highlight: "Comida boa, risadas sinceras e a Clara sendo nossa fã número 1 de vela."
+      "A gente combinou um date no Salvador Shopping que era para ser um date duplo com a Ste e a Clara, só que a Ste já tinha marcado de assistir com os amigos dela e a Clara sobrou de vela. Assistimos ao jogo do Brasil contra o Japão no Madero: foi um jogo super acirrado, a gente dava um beijo a cada ponto do Brasil e no final o Brasil conseguiu virar o jogo.",
+    highlight: "Um beijo a cada ponto e a Clara de vela oficial."
   },
   {
     id: "saga-da-vela-gattai",
