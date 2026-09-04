@@ -122,10 +122,10 @@ export default function HeroSection({ onStartStory, isReady = true }) {
       </div>
 
       <div className="max-w-3xl z-10 flex flex-col items-center">
-        {/* Top Badge ("Nossa Linha do Tempo") */}
-        <div className="hero-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6 opacity-0">
-          <FaHeart className="w-3 h-3 text-rose-500 animate-pulse" />
-          Nossa Linha do Tempo
+        {/* Top Badge ("04 de Setembro • Nova etapa") */}
+        <div className="hero-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6 opacity-0 shadow-lg shadow-rose-500/10">
+          <FaHeart className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
+          04 de Setembro • Nova etapa
         </div>
 
         {/* Title Word-by-Word */}
