@@ -18,7 +18,7 @@ export default function App() {
     <>
       {loading && <Loader onLoadComplete={() => setLoading(false)} />}
       <main className="min-h-screen w-full bg-[#0c0a09] text-white selection:bg-rose-500 selection:text-white">
-        <HeroSection onStartStory={handleStartStory} />
+        <HeroSection isReady={!loading} onStartStory={handleStartStory} />
         <StoryTimeline />
         <ClosingSection />
       </main>

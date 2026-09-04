@@ -54,7 +54,9 @@ export default function Loader({ onLoadComplete }) {
   const loaderRef = useRef(null);
 
   useEffect(() => {
-    const imagesToLoad = storySlides.map((s) => s.image);
+    const imagesToLoad = Array.from(
+      new Set([...storySlides.map((s) => s.image), '/images/IMG-20260618-WA0018.webp'])
+    );
     const totalAssets = imagesToLoad.length;
     let loadedCount = 0;
 

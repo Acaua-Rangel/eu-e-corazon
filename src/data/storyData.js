@@ -1,22 +1,22 @@
 export const storySlides = [
   {
     id: "inicio-stories",
-    date: "13 a 18 de Junho",
+    date: "13 de Junho",
     tagline: "Como tudo começou",
     title: "Aquele Story e o Início de Tudo",
-    image: "/images/IMG-20260618-WA0018.webp",
+    image: "/images/20260613.webp",
     description:
       "Tudo começou por um acaso do destino no dia 13 de junho. Sua irmã precisava de companhia para ir ao estádio assistir ao jogo de futebol. Eu não pude ir naquele dia, e você foi acompanhá-la. Quando eu vi aquele story da sua irmã e te vi ali, não pensei duas vezes: te chamei de linda. A partir daquela resposta, a gente não parou mais de conversar um único segundo.",
     highlight: "Um story despretensioso que mudou a minha vida para sempre."
   },
   {
-    id: "le-parc",
+    id: "primeiro-dia-casa-dela",
     date: "19 de Junho",
     tagline: "O nosso primeiro dia",
-    title: "Le Parc, o Celular e a Sala de Jogos",
+    title: "Na Sua Casa: O Celular e a Sala de Jogos",
     image: "/images/IMG-20260619-WA0043.webp",
     description:
-      "No dia 19, fui até a sua casa lá no condomínio Le Parc para a gente assistir juntos ao jogo do Brasil. Chegando lá, o salão onde ia passar a transmissão estava fechado! Mas nada disso importava: fomos para a sala de jogos e começamos a assistir ao jogo juntinhos, numa telinha de celular, enquanto o papo fluía como se já nos conhecêssemos há uma vida inteira. Foi ali que a gente começou a ficar de verdade.",
+      "No dia 19, fui até a sua casa para a gente assistir juntos ao jogo do Brasil. Chegando lá, o salão onde ia passar a transmissão estava fechado! Mas nada disso importava: fomos para a sala de jogos e começamos a assistir ao jogo juntinhos, numa telinha de celular, enquanto o papo fluía como se já nos conhecêssemos há uma vida inteira. Foi ali que a gente começou a ficar de verdade.",
     highlight: "O salão fechado virou o melhor cenário do mundo só porque eu estava com você."
   },
   {
