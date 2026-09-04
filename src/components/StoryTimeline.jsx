@@ -25,7 +25,8 @@ export default function StoryTimeline() {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const scrollPerSlide = 220;
+      // Sensibilidade confortável por slide
+      const scrollPerSlide = 300;
       const totalScrollDistance = (totalSlides - 1) * scrollPerSlide;
       const segmentDuration = 1;
 
@@ -101,6 +102,9 @@ export default function StoryTimeline() {
       }
     }, containerRef);
 
+    // Refresh ScrollTrigger calculations after initial mount
+    ScrollTrigger.refresh();
+
     return () => ctx.revert();
   }, [totalSlides]);
 
@@ -125,7 +129,7 @@ export default function StoryTimeline() {
       const diffY = e.touches[0].clientY - startY;
       const diffX = e.touches[0].clientX - startX;
 
-      if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 10) {
+      if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 8) {
         if (e.cancelable) e.preventDefault();
       }
     };
@@ -181,10 +185,10 @@ export default function StoryTimeline() {
   }, [totalSlides, scrollToSlideIndex]);
 
   return (
-    <section id="story-timeline" className="relative w-full h-[100dvh] overflow-hidden">
+    <section id="story-timeline" className="relative w-full">
       <div
         ref={containerRef}
-        className="relative w-full h-full overflow-hidden bg-[#0c0a09] select-none"
+        className="relative w-full h-[100dvh] overflow-hidden bg-[#0c0a09] select-none"
       >
         {/* Images / Videos Layer */}
         {storySlides.map((slide, i) => (
