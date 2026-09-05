@@ -83,10 +83,10 @@ export const storySlides = [
     id: "museu-arte-bahia-3",
     date: "11 de Julho",
     tagline: "Sua espontaneidade",
-    title: "O totem do astronauta",
+    title: "O Menino Maluquinho",
     image: "/images/20260711_174825.webp",
     description:
-      "Você colocando o rosto no totem do astronauta do Mundo Bita, no meio do salão do palacete com aquele piso xadrez clássico. É essa sua leveza, seu sorriso solto e sua autenticidade que me conquistam todos os dias.",
+      "Você colocando o rosto no totem do Menino Maluquinho na exposição do Mundo Bita, no meio do salão do palacete com aquele piso xadrez clássico. É essa sua leveza, seu sorriso solto e sua autenticidade que me conquistam todos os dias.",
     highlight: "Quem tem o privilégio de te ver sorrir tem tudo."
   },
   {
